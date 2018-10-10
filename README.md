@@ -1,6 +1,6 @@
 # Hickory CSS Selectors
 
-[Hickory](https://github.com/davidsantiago/hickory) provides a namespace of [_selectors_](https://github.com/davidsantiago/hickory#selectors)
+[Hickory](https://github.com/davidsantiago/hickory) provides a namespace of [selectors](https://github.com/davidsantiago/hickory#selectors)
 with functionality similar to CSS selectors, for selecting particular elements from a document tree.
 
 This proof-of-concept provides a CSS-to-Hickory selector translator that can turn
@@ -16,6 +16,8 @@ into a Hickory selector like this:
     (s/and (s/tag :ul) (s/class :styled)))
   (s/and (s/tag :a) (s/attr :href)))
 ```
+
+CSS selectors can be used as a concise syntax for extracting structured data from HTML documents.
 
 ## Usage
 
@@ -40,6 +42,12 @@ Convert some HTML into Hickory, then select elements from it using CSS selector 
   :content ["Reference‍"]}]
 ```
 
+### Tests
+
+```bash
+$ clojure -A:test
+```
+
 ## Contributions
 
-I welcome them.
+I welcome them!
