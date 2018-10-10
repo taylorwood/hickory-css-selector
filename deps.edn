@@ -1,0 +1,2 @@
+{:deps {hickory {:mvn/version "0.7.1"}
+        instaparse {:mvn/version "1.4.9"}}}
