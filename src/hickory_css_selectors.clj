@@ -16,7 +16,7 @@
     ANY = <'*'>
     ELEM = NAME
     <NAME> = #'[A-Za-z0-9\\-\\_]+'
-    <SPEC> = ATTR | NTH_CHILD
+    <SPEC> = ATTR | NTH_CHILD | HAS_CHILD | HAS_TEXT
     ATTR = <'['> ATTR_BODY <']'>
     <ATTR_BODY> = NAME PRED?
     PRED = ATTR_OP VALUE
@@ -25,11 +25,15 @@
     <SYM> = #'[^\"\\'\\]]+'\n
     NTH_CHILD = <':nth-child('> NTH <')'>
     NTH = #'[0-9]+'
+    HAS_CHILD = <':has('> SELECTOR <')'>
+    HAS_TEXT = <':contains(\\''> TEXT_SQ <'\\')'> | <':contains(\"'> TEXT_DQ <'\")'>
+    <TEXT_SQ> = #'[^\\']*'
+    <TEXT_DQ> = #'[^\"]*'
     <PATH> = CHILD | DESCENDANT | SIBLING | NEXT_SIBLING
-    CHILD        = TOKEN <SPACE?> <'>'> <SPACE?> SELECTOR
-    DESCENDANT   = TOKEN <SPACE> SELECTOR
-    SIBLING      = TOKEN <SPACE?> <'~'> <SPACE?> SELECTOR
-    NEXT_SIBLING = TOKEN <SPACE?> <'+'> <SPACE?> SELECTOR
+    CHILD        = SELECTOR <SPACE?> <'>'> <SPACE?> TOKEN
+    DESCENDANT   = SELECTOR <SPACE> TOKEN
+    SIBLING      = SELECTOR <SPACE?> <'~'> <SPACE?> TOKEN
+    NEXT_SIBLING = SELECTOR <SPACE?> <'+'> <SPACE?> TOKEN
     <SPACE> = #'\\s+'"))
 
 (def syntax->selector
@@ -49,6 +53,8 @@
                      "~=" cs/includes?)
    :NTH_CHILD     s/nth-child
    :NTH           #(Integer/parseInt %)
+   :HAS_CHILD     s/has-child
+   :HAS_TEXT      (comp s/find-in-text re-pattern)
    :CHILD         s/child
    :DESCENDANT    s/descendant
    :SIBLING       s/follow
