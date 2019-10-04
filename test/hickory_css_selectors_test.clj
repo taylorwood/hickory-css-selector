@@ -8,83 +8,83 @@
 (deftest css-selector-parser-test
   (are [css tree] (= tree (p/parse css-selector-parser css))
     ".some-class"
-    [[:TOKEN [:CLASS "some-class"]]]
+    [[:token [:class "some-class"]]]
     ".xyz[x]"
-    [[:TOKEN [:CLASS "xyz"] [:ATTR "x"]]]
+    [[:token [:class "xyz"] [:attr "x"]]]
     ".xyz[x=y]"
-    [[:TOKEN [:CLASS "xyz"] [:ATTR "x" [:PRED [:ATTR_OP "="] [:VALUE "y"]]]]]
+    [[:token [:class "xyz"] [:attr "x" [:pred [:attr-op "="] [:value "y"]]]]]
     ".xyz[x_z='y']"
-    [[:TOKEN [:CLASS "xyz"] [:ATTR "x_z" [:PRED [:ATTR_OP "="] [:VALUE "y"]]]]]
+    [[:token [:class "xyz"] [:attr "x_z" [:pred [:attr-op "="] [:value "y"]]]]]
     ".xyz[4]"
-    [[:TOKEN [:CLASS "xyz"] [:ATTR "4"]]]
+    [[:token [:class "xyz"] [:attr "4"]]]
     "div#id"
-    [[:TOKEN [:ELEM "div"] [:ID "id"]]]
+    [[:token [:elem "div"] [:id "id"]]]
     "#xyz.bold"
-    [[:TOKEN [:ID "xyz"] [:CLASS "bold"]]]
+    [[:token [:id "xyz"] [:class "bold"]]]
     "h1.bold[title]"
-    [[:TOKEN [:ELEM "h1"] [:CLASS "bold"] [:ATTR "title"]]]
+    [[:token [:elem "h1"] [:class "bold"] [:attr "title"]]]
     ".foo.bar.baz"
-    [[:TOKEN [:CLASS "foo"] [:CLASS "bar"] [:CLASS "baz"]]]
+    [[:token [:class "foo"] [:class "bar"] [:class "baz"]]]
     ".foo.bar > #foo"
-    [[:CHILD
-      [:TOKEN [:CLASS "foo"] [:CLASS "bar"]]
-      [:TOKEN [:ID "foo"]]]]
+    [[:child
+      [:token [:class "foo"] [:class "bar"]]
+      [:token [:id "foo"]]]]
     ".foo.bar + #foo"
-    [[:NEXT_SIBLING
-      [:TOKEN [:CLASS "foo"] [:CLASS "bar"]]
-      [:TOKEN [:ID "foo"]]]]
+    [[:next-sibling
+      [:token [:class "foo"] [:class "bar"]]
+      [:token [:id "foo"]]]]
     ".foo.bar ~ #foo"
-    [[:SIBLING
-      [:TOKEN [:CLASS "foo"] [:CLASS "bar"]]
-      [:TOKEN [:ID "foo"]]]]
+    [[:sibling
+      [:token [:class "foo"] [:class "bar"]]
+      [:token [:id "foo"]]]]
     ".foo.bar #foo"
-    [[:DESCENDANT
-      [:TOKEN [:CLASS "foo"] [:CLASS "bar"]]
-      [:TOKEN [:ID "foo"]]]]
+    [[:descendant
+      [:token [:class "foo"] [:class "bar"]]
+      [:token [:id "foo"]]]]
     "body:nth-child(1)"
-    [[:TOKEN [:ELEM "body"] [:NTH_CHILD [:NTH "1"]]]]
+    [[:token [:elem "body"] [:nth-child [:nth "1"]]]]
     "div:has(p)"
-    [[:TOKEN [:ELEM "div"] [:HAS_CHILD [:TOKEN [:ELEM "p"]]]]]
+    [[:token [:elem "div"] [:has-child [:token [:elem "p"]]]]]
     "div:contains('bla')"
-    [[:TOKEN [:ELEM "div"] [:HAS_TEXT "bla"]]]
+    [[:token [:elem "div"] [:has-text "bla"]]]
     ".foo.bar>#foo:nth-child(1)"
-    [[:CHILD
-      [:TOKEN [:CLASS "foo"] [:CLASS "bar"]]
-      [:TOKEN [:ID "foo"] [:NTH_CHILD [:NTH "1"]]]]]
+    [[:child
+      [:token [:class "foo"] [:class "bar"]]
+      [:token [:id "foo"] [:nth-child [:nth "1"]]]]]
     "x > .y > #z a b > c"
-    [[:CHILD
-      [:DESCENDANT
-       [:DESCENDANT
-        [:CHILD
-         [:CHILD
-          [:TOKEN [:ELEM "x"]]
-          [:TOKEN [:CLASS "y"]]]
-         [:TOKEN [:ID "z"]]]
-        [:TOKEN [:ELEM "a"]]]
-       [:TOKEN [:ELEM "b"]]]
-      [:TOKEN [:ELEM "c"]]]]
+    [[:child
+      [:descendant
+       [:descendant
+        [:child
+         [:child
+          [:token [:elem "x"]]
+          [:token [:class "y"]]]
+         [:token [:id "z"]]]
+        [:token [:elem "a"]]]
+       [:token [:elem "b"]]]
+      [:token [:elem "c"]]]]
     "x y z"
-    [[:DESCENDANT
-      [:DESCENDANT
-       [:TOKEN [:ELEM "x"]]
-       [:TOKEN [:ELEM "y"]]]
-      [:TOKEN [:ELEM "z"]]]]
+    [[:descendant
+      [:descendant
+       [:token [:elem "x"]]
+       [:token [:elem "y"]]]
+      [:token [:elem "z"]]]]
     "#readme > div.Box-body.p-6 > article > p:nth-child(19)"
-    [[:CHILD
-      [:CHILD
-       [:CHILD
-        [:TOKEN [:ID "readme"]]
-        [:TOKEN [:ELEM "div"] [:CLASS "Box-body"] [:CLASS "p-6"]]]
-       [:TOKEN [:ELEM "article"]]]
-      [:TOKEN [:ELEM "p"] [:NTH_CHILD [:NTH "19"]]]]]
+    [[:child
+      [:child
+       [:child
+        [:token [:id "readme"]]
+        [:token [:elem "div"] [:class "Box-body"] [:class "p-6"]]]
+       [:token [:elem "article"]]]
+      [:token [:elem "p"] [:nth-child [:nth "19"]]]]]
     "html > body > div > li:nth-child(2)"
-    [[:CHILD
-      [:CHILD
-       [:CHILD
-        [:TOKEN [:ELEM "html"]]
-        [:TOKEN [:ELEM "body"]]]
-       [:TOKEN [:ELEM "div"]]]
-      [:TOKEN [:ELEM "li"] [:NTH_CHILD [:NTH "2"]]]]]))
+    [[:child
+      [:child
+       [:child
+        [:token [:elem "html"]]
+        [:token [:elem "body"]]]
+       [:token [:elem "div"]]]
+      [:token [:elem "li"] [:nth-child [:nth "2"]]]]]))
 
 (def tree
   (-> "<html><body>
