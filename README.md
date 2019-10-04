@@ -51,3 +51,5 @@ $ clojure -A:test
 ## Contributions
 
 I welcome them!
+
+Many thanks to @vitobasso for adding sibling (`~`, `+`), `:has`, and `:contains` support!
